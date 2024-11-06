@@ -4,6 +4,7 @@ import (
 	"Expire/helper"
 	"Expire/model"
 	"strconv"
+	"strings"
 
 	request "Expire/data/request/User"
 	response "Expire/data/response/User"
@@ -15,6 +16,7 @@ import (
 	repository "Expire/repository/User"
 
 	"github.com/go-playground/validator/v10"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserServiceImpl struct {
@@ -79,10 +81,12 @@ func (t UserServiceImpl) CreateNewUser(data request.CreateUserRequest) *helper.C
 			return createError
 		}
 
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
 		userModel := model.User{
-			Email:    data.Email,
-			Password: data.Password,
-			Type:     1,
+			Email:    strings.ToLower(data.Email),
+			Password: string(hashedPassword),
+			Type:     data.Type,
 			Key:      res.ID.String(),
 		}
 
@@ -106,10 +110,12 @@ func (t UserServiceImpl) CreateNewUser(data request.CreateUserRequest) *helper.C
 			return createError
 		}
 
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
 		userModel := model.User{
-			Email:    data.Email,
-			Password: data.Password,
-			Type:     1,
+			Email:    strings.ToLower(data.Email),
+			Password: string(hashedPassword),
+			Type:     data.Type,
 			Key:      res.ID.String(),
 		}
 
@@ -137,9 +143,11 @@ func (t UserServiceImpl) CreateNewUser(data request.CreateUserRequest) *helper.C
 			return createError
 		}
 
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+
 		userModel := model.User{
-			Email:    data.Email,
-			Password: data.Password,
+			Email:    strings.ToLower(data.Email),
+			Password: string(hashedPassword),
 			Type:     2,
 			Key:      res.ID.String(),
 		}
