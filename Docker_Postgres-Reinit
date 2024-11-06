@@ -1,10 +1,22 @@
- Connecting PGAdmin with Postgres from Docker
+Connecting PGAdmin with Postgres from Docker (Step untuk buka database)
+ - make sure "docker-compose up -d" 
  - docker container ls
- - Copy postgres container ID
+ - Copy postgres container ID #ngambil yang postgres ya han
  - docker inspect (containerID)
  - Copy IP Address
  - Using it to Create Server in PG Admin
  - Open http://127.0.0.1:5050/browser/, login with admin@admin.com password:reza24434
+
+
+
+ How to Start Project:
+ 1. Buka Projct FE nya, & buka command line (ctrl+~)
+ 2. ketika 'npm run dev', Done! FE nya sudah jalan
+ 3. Buka Project BE nya (SimantulMicroservice), Buka command line
+ 4. ketik 'docker-compose up -d'
+ 5. ketik 'go run main.go', Done, BE nya sudah jalan
+ 6. buka browser, ketika localhost:5173
+
 
 
 
