@@ -68,6 +68,7 @@ func NewRouter(
 	// protectedUserRouter.GET("", userController.GetUser)
 	protectedUserRouter.POST("", userController.Create)
 	protectedUserRouter.GET("", userController.GetAllUser)
+	protectedUserRouter.DELETE("/:id", userController.Delete)
 
 	protectedReportRouter := router.Group("/report")
 	protectedReportRouter.Use(middleware.DeserializeUser(Db))
@@ -79,6 +80,9 @@ func NewRouter(
 	protectedReportRouter.PUT("/dokumen-tindak-lanjut", reportController.UpdateDokumenTindakLanjut)
 	protectedReportRouter.GET("", reportController.GetAllReport)
 	protectedReportRouter.GET("/:id", reportController.GetReport)
+	protectedReportRouter.GET("/supervisor/:id", reportController.GetAllSupervisorReport)
+	protectedReportRouter.GET("/leader/:id", reportController.GetAllLeaderReport)
+	protectedReportRouter.GET("/bank/:id", reportController.GetAllBankReport)
 
 	protectedSupervisorRouter := router.Group("/supervisor")
 	protectedSupervisorRouter.Use(middleware.DeserializeUser(Db))
@@ -103,7 +107,7 @@ func NewRouter(
 	protectedReasonRouter.POST("", reasonController.Create)
 	protectedReasonRouter.GET("", reasonController.GetAllReason)
 	protectedReasonRouter.GET("/:id", reasonController.GetReason)
-	protectedReasonRouter.GET("/byreport", reasonController.FindReasonsByReportID)
+	protectedReasonRouter.GET("/all/:id", reasonController.FindReasonsByReportID)
 
 	protectedExternalRouter := router.Group("/external")
 	protectedExternalRouter.Use(middleware.DeserializeUser(Db))

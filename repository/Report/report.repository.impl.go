@@ -52,7 +52,61 @@ func (t *ReportRepositoryImpl) GetReport(id string) (*model.Report, *helper.Cust
 
 func (t *ReportRepositoryImpl) GetAllReport() ([]model.Report, *helper.CustomError) {
 	var reports []model.Report
-	result := t.Db.Preload("Bank").Preload("Supervisor").Preload("Leader").Find(&reports)
+	result := t.Db.Preload("Bank").Preload("Supervisor").Preload("Leader").Order("created_at DESC").Find(&reports)
+	if result.Error != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return nil, &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return reports, nil
+}
+
+func (t *ReportRepositoryImpl) GetAllSupervisorReports(id string) ([]model.Report, *helper.CustomError) {
+	var reports []model.Report
+	supervisorId, _ := uuid.Parse(id)
+
+	result := t.Db.Preload("Bank").Preload("Supervisor").Preload("Leader").Order("created_at DESC").Where("supervisor_id = ?", supervisorId).Find(&reports)
+	if result.Error != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return nil, &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return reports, nil
+}
+
+func (t *ReportRepositoryImpl) GetAllLeaderReports(id string) ([]model.Report, *helper.CustomError) {
+	var reports []model.Report
+	leaderId, _ := uuid.Parse(id)
+
+	result := t.Db.Preload("Bank").Preload("Supervisor").Preload("Leader").Order("created_at DESC").Where("leader_id = ?", leaderId).Find(&reports)
+	if result.Error != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return nil, &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return reports, nil
+}
+
+func (t *ReportRepositoryImpl) GetAllBankReports(bankId string) ([]model.Report, *helper.CustomError) {
+	var reports []model.Report
+	id, _ := uuid.Parse(bankId)
+
+	result := t.Db.Preload("Bank").Preload("Supervisor").Preload("Leader").Order("created_at DESC").Where("bank_id = ?", id).Find(&reports)
 	if result.Error != nil {
 		fileName, atLine := helper.GetFileAndLine(result.Error)
 		return nil, &helper.CustomError{
@@ -74,6 +128,40 @@ func (t *ReportRepositoryImpl) Update(report model.Report) *helper.CustomError {
 		return &helper.CustomError{
 			Code:     500,
 			Message:  "Unexpected Error When Creating New Report.",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return nil
+}
+
+func (t *ReportRepositoryImpl) DeleteBySupervisor(id string) *helper.CustomError {
+	supervisorId, err := uuid.Parse(id)
+	result := t.Db.Where("supervisor_id = ?", supervisorId).Delete(&model.Report{})
+
+	if result.Error != nil || err != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return nil
+}
+
+func (t *ReportRepositoryImpl) DeleteByLeader(id string) *helper.CustomError {
+	leaderId, err := uuid.Parse(id)
+	result := t.Db.Where("leader_id = ?", leaderId).Delete(&model.Report{})
+
+	if result.Error != nil || err != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
 			FileName: fileName,
 			AtLine:   atLine,
 		}

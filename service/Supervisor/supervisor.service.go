@@ -10,4 +10,5 @@ type SupervisorService interface {
 	Create(report request.CreateSupervisorRequest) *helper.CustomError
 	GetSupervisor(id string) (*response.SupervisorResponse, *helper.CustomError)
 	GetAllSupervisor() ([]response.SupervisorResponse, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }

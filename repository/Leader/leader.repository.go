@@ -11,4 +11,5 @@ type LeaderRepository interface {
 	GetAllLeader() ([]model.Leader, *helper.CustomError)
 	FindLeaderById(leaderId string) (*model.Leader, *helper.CustomError)
 	FindByName(name string) (*model.Leader, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }

@@ -121,3 +121,13 @@ func (t SupervisorServiceImpl) FindByName(id string) (*response.SupervisorRespon
 		return &response, nil
 	}
 }
+
+func (t SupervisorServiceImpl) Delete(id string) *helper.CustomError {
+	err := t.SupervisorRepository.Delete(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

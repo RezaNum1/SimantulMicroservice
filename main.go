@@ -66,7 +66,7 @@ func main() {
 	externalRepository := externalRepository.NewExternalRepositoryImpl(db)
 
 	// Services
-	userService := userService.NewUserServiceImpl(bankRepository, userRepository, supervisorRepository, externalRepository, leaderRepository, validate)
+	userService := userService.NewUserServiceImpl(bankRepository, userRepository, supervisorRepository, externalRepository, leaderRepository, reportRepository, validate)
 	tokenService := tokenService.NewTokenServiceImpl(userRepository)
 	authService := authService.NewAuthServiceImpl(userRepository, supervisorRepository, leaderRepository, externalRepository, validate)
 	reportService := reportService.NewReportServiceImpl(reportRepository, supervisorRepository, leaderRepository, bankRepository, reasonRepository, externalRepository, validate)

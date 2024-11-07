@@ -88,6 +88,60 @@ func (controller *ReportController) GetAllReport(ctx *gin.Context) {
 	}
 }
 
+func (controller *ReportController) GetAllSupervisorReport(ctx *gin.Context) {
+	stringId := ctx.Param("id")
+	reportResponse, errReportResponse := controller.reportService.GetAllSupervisorReports(stringId)
+
+	if errReportResponse != nil {
+		helper.ResponseError(ctx, *errReportResponse)
+	} else {
+		webResponse := response.Response{
+			Success: true,
+			Code:    200,
+			Message: "Success",
+			Data:    reportResponse,
+		}
+
+		ctx.JSON(http.StatusOK, webResponse)
+	}
+}
+
+func (controller *ReportController) GetAllLeaderReport(ctx *gin.Context) {
+	stringId := ctx.Param("id")
+	reportResponse, errReportResponse := controller.reportService.GetAllLeaderReports(stringId)
+
+	if errReportResponse != nil {
+		helper.ResponseError(ctx, *errReportResponse)
+	} else {
+		webResponse := response.Response{
+			Success: true,
+			Code:    200,
+			Message: "Success",
+			Data:    reportResponse,
+		}
+
+		ctx.JSON(http.StatusOK, webResponse)
+	}
+}
+
+func (controller *ReportController) GetAllBankReport(ctx *gin.Context) {
+	stringId := ctx.Param("id")
+	reportResponse, errReportResponse := controller.reportService.GetAllBankReports(stringId)
+
+	if errReportResponse != nil {
+		helper.ResponseError(ctx, *errReportResponse)
+	} else {
+		webResponse := response.Response{
+			Success: true,
+			Code:    200,
+			Message: "Success",
+			Data:    reportResponse,
+		}
+
+		ctx.JSON(http.StatusOK, webResponse)
+	}
+}
+
 func (controller *ReportController) Update(ctx *gin.Context) {
 
 	var payload request.UpdateReportRequest

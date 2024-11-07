@@ -103,3 +103,13 @@ func (t LeaderServiceImpl) convertLeaderToLeaderResponse(leader model.Leader) re
 	}
 	return responseLeader
 }
+
+func (t LeaderServiceImpl) Delete(id string) *helper.CustomError {
+	err := t.LeaderRepository.Delete(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

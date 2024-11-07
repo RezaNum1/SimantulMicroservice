@@ -186,6 +186,38 @@ func (t ReportServiceImpl) GetAllReport() ([]response.ReportResponse, *helper.Cu
 	}
 }
 
+func (t ReportServiceImpl) GetAllSupervisorReports(id string) ([]response.ReportResponse, *helper.CustomError) {
+	result, fetchError := t.ReportRepository.GetAllSupervisorReports(id)
+
+	if fetchError != nil {
+		return nil, fetchError
+	} else {
+		return t.mapReportsToReportResponse(result), nil
+	}
+}
+
+func (t ReportServiceImpl) GetAllLeaderReports(id string) ([]response.ReportResponse, *helper.CustomError) {
+	result, fetchError := t.ReportRepository.GetAllLeaderReports(id)
+
+	if fetchError != nil {
+		return nil, fetchError
+	} else {
+		return t.mapReportsToReportResponse(result), nil
+	}
+}
+
+func (t ReportServiceImpl) GetAllBankReports(id string) ([]response.ReportResponse, *helper.CustomError) {
+	externals, _ := t.ExternalRepository.GetExternal(id)
+	println(externals.Bank.ID.String())
+	result, fetchError := t.ReportRepository.GetAllBankReports(externals.Bank.ID.String())
+
+	if fetchError != nil {
+		return nil, fetchError
+	} else {
+		return t.mapReportsToReportResponse(result), nil
+	}
+}
+
 func (t ReportServiceImpl) mapReportsToReportResponse(reports []model.Report) []response.ReportResponse {
 	responseReports := make([]response.ReportResponse, len(reports))
 	for i, report := range reports {
@@ -306,18 +338,18 @@ func (t ReportServiceImpl) UpdateStatus(report request.UpdateStatusReportRequest
 	}
 
 	data, fetchErr := t.ReportRepository.GetReport(report.ID)
-	data.PrevStatus = data.Status
-	data.Status = report.Status
-
-	saveErr := t.ReportRepository.Update(*data)
-
 	// Add Resons
 	if utf8.RuneCountInString(report.Alasan) > 0 && report.Alasan != "" {
-		errReason := t.ReasonRepository.Create(model.Reason{Description: report.Alasan, ReportID: data.ID.String()})
+		errReason := t.ReasonRepository.Create(model.Reason{Description: report.Alasan, RejectedStep: data.Status, ReportID: data.ID.String()})
 		if errReason != nil {
 			return errReason
 		}
 	}
+
+	data.PrevStatus = data.Status
+	data.Status = report.Status
+
+	saveErr := t.ReportRepository.Update(*data)
 
 	if fetchErr != nil || saveErr != nil {
 		println("🐶 2")

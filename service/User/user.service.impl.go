@@ -12,6 +12,7 @@ import (
 	bankRepository "Expire/repository/Bank"
 	externalRepository "Expire/repository/External"
 	leaderRepository "Expire/repository/Leader"
+	reportRepository "Expire/repository/Report"
 	supervisorRepository "Expire/repository/Supervisor"
 	repository "Expire/repository/User"
 
@@ -25,6 +26,7 @@ type UserServiceImpl struct {
 	LeaderRepository     leaderRepository.LeaderRepository
 	ExternalRepository   externalRepository.ExternalRepository
 	BankRepository       bankRepository.BankRepository
+	ReportRepository     reportRepository.ReportRepository
 	Validate             *validator.Validate
 }
 
@@ -34,6 +36,7 @@ func NewUserServiceImpl(
 	supervisorRepository supervisorRepository.SupervisorRepository,
 	externalRepository externalRepository.ExternalRepository,
 	leaderRepository leaderRepository.LeaderRepository,
+	reportRepository reportRepository.ReportRepository,
 	validate *validator.Validate) UserService {
 	return &UserServiceImpl{
 		UserRepository:       userRepository,
@@ -41,6 +44,7 @@ func NewUserServiceImpl(
 		LeaderRepository:     leaderRepository,
 		ExternalRepository:   externalRepository,
 		BankRepository:       bankRepository,
+		ReportRepository:     reportRepository,
 		Validate:             validate,
 	}
 }
@@ -189,4 +193,42 @@ func (t UserServiceImpl) convertUserToUserResponse(user model.User) response.Use
 		BankName: user.Key,
 	}
 	return responseUser
+}
+
+func (t UserServiceImpl) Delete(id string) *helper.CustomError {
+	var errState *helper.CustomError
+
+	user, errState := t.UserRepository.GetUserByID(id)
+
+	if errState != nil {
+		return errState
+	}
+
+	if user.Type == 1 { // Pengawas
+		errState = t.ReportRepository.DeleteBySupervisor(user.Key)
+		if errState != nil {
+			return errState
+		}
+		errState = t.SupervisorRepository.Delete(user.Key)
+	} else if user.Type == 2 { // Bank
+		errState = t.ExternalRepository.Delete(user.Key)
+	} else if user.Type == 99 { // Pimpinan
+		errState = t.ReportRepository.DeleteByLeader(user.Key)
+		if errState != nil {
+			return errState
+		}
+		errState = t.LeaderRepository.Delete(user.Key)
+	}
+
+	if errState != nil {
+		return errState
+	}
+
+	errState = t.UserRepository.Delete(id)
+
+	if errState != nil {
+		return errState
+	}
+
+	return nil
 }

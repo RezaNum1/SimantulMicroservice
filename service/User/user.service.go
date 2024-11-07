@@ -10,4 +10,5 @@ type UserService interface {
 	GetUserByID(id string) (*response.UserResponse, *helper.CustomError)
 	CreateNewUser(data request.CreateUserRequest) *helper.CustomError
 	GetAllUser() ([]response.UserDataResponse, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }

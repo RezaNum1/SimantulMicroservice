@@ -87,21 +87,9 @@ func (controller *ReasonController) GetAllReason(ctx *gin.Context) {
 }
 
 func (controller *ReasonController) FindReasonsByReportID(ctx *gin.Context) {
-	var payload request.FindReasonsRequest
+	stringId := ctx.Param("id")
 
-	errBindJSON := ctx.ShouldBindJSON(&payload)
-	if errBindJSON != nil {
-		fileName, atLine := helper.GetFileAndLine(errBindJSON)
-		helper.ResponseError(ctx, helper.CustomError{
-			Code:     400,
-			Message:  "Invalid Request Structure.",
-			FileName: fileName,
-			AtLine:   atLine,
-		})
-		return
-	}
-
-	reasonResponse, errReasonResponse := controller.reasonService.FindReasonsByReportID(payload.ReportID)
+	reasonResponse, errReasonResponse := controller.reasonService.FindReasonsByReportID(stringId)
 
 	if errReasonResponse != nil {
 		helper.ResponseError(ctx, *errReasonResponse)

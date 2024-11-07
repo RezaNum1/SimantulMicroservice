@@ -96,3 +96,23 @@ func (controller *UserController) GetAllUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, webResponse)
 	}
 }
+
+func (controller *UserController) Delete(ctx *gin.Context) {
+	stringId := ctx.Param("id")
+
+	println("🐯", stringId)
+
+	errResponse := controller.userService.Delete(stringId)
+
+	if errResponse != nil {
+		helper.ResponseError(ctx, *errResponse)
+	} else {
+		webResponse := response.Response{
+			Success: true,
+			Code:    200,
+			Message: "Success",
+			Data:    errResponse,
+		}
+		ctx.JSON(http.StatusOK, webResponse)
+	}
+}

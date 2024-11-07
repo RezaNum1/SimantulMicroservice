@@ -108,3 +108,20 @@ func (t *ExternalRepositoryImpl) FindByName(name string) (*model.External, *help
 	}
 	return &external, nil
 }
+
+func (t *ExternalRepositoryImpl) Delete(id string) *helper.CustomError {
+	userId, err := uuid.Parse(id)
+	result := t.Db.Unscoped().Delete(&model.External{}, userId)
+
+	if result.Error != nil || err != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return nil
+}

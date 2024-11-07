@@ -14,4 +14,5 @@ type UserRepository interface {
 	FindUserByEmail(email string) (*model.User, *helper.CustomError)
 	UpdatePasssword(email string, newPassword string) *helper.CustomError
 	GetAllUser() ([]model.User, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }

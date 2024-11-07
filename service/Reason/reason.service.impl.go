@@ -61,8 +61,9 @@ func (t ReasonServiceImpl) GetReason(id string) (*response.ReasonResponse, *help
 		return nil, fetchError
 	} else {
 		response := response.ReasonResponse{
-			Id:          (*uuid.UUID)(result.ID),
-			Description: result.Description,
+			Id:           (*uuid.UUID)(result.ID),
+			Description:  result.Description,
+			RejectedStep: result.RejectedStep,
 		}
 
 		return &response, nil
@@ -90,8 +91,9 @@ func (t ReasonServiceImpl) mapReasonsToReasonResponse(reasons []model.Reason) []
 func (t ReasonServiceImpl) convertReasonToReasonResponse(reason model.Reason) response.ReasonResponse {
 	// Perform necessary conversion logic here, potentially selecting specific fields
 	responseReason := response.ReasonResponse{
-		Id:          (*uuid.UUID)(reason.ID),
-		Description: reason.Description,
+		Id:           (*uuid.UUID)(reason.ID),
+		Description:  reason.Description,
+		RejectedStep: reason.RejectedStep,
 	}
 	return responseReason
 }

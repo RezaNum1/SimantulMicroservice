@@ -11,4 +11,5 @@ type ExternalService interface {
 	GetExternal(id string) (*response.ExternalResponse, *helper.CustomError)
 	GetAllExternal() ([]response.ExternalResponse, *helper.CustomError)
 	Update(external request.UpdateExternalRequest) *helper.CustomError
+	Delete(id string) *helper.CustomError
 }

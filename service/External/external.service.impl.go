@@ -151,3 +151,13 @@ func (t ExternalServiceImpl) Update(external request.UpdateExternalRequest) *hel
 
 	return nil
 }
+
+func (t ExternalServiceImpl) Delete(id string) *helper.CustomError {
+	err := t.ExternalRepository.Delete(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

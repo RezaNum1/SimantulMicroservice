@@ -10,8 +10,8 @@ import (
 type Report struct {
 	gorm.Model
 	ID                  *uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
-	Periode             string     `gorm:"type:varchar(255);not null"`
-	JenisTemuan         string     `gorm:"type:varchar(255);not null"`
+	Periode             string     `gorm:"type:varchar;not null"`
+	JenisTemuan         string     `gorm:"type:varchar;not null"`
 	JudulTemuan         string     `gorm:"type:varchar;not null"`
 	JenisPemeriksaan    string     `gorm:"type:varchar;not null"`
 	JenisKantor         string     `gorm:"type:varchar;not null"`

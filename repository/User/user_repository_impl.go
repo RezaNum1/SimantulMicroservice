@@ -160,7 +160,7 @@ func (t *UserRepositoryImpl) UpdatePasssword(email string, newPassword string) *
 
 func (t *UserRepositoryImpl) GetAllUser() ([]model.User, *helper.CustomError) {
 	var users []model.User
-	result := t.Db.Find(&users)
+	result := t.Db.Order("created_at DESC").Find(&users)
 	if result.Error != nil {
 		fileName, atLine := helper.GetFileAndLine(result.Error)
 		return nil, &helper.CustomError{
@@ -172,4 +172,21 @@ func (t *UserRepositoryImpl) GetAllUser() ([]model.User, *helper.CustomError) {
 	}
 
 	return users, nil
+}
+
+func (t *UserRepositoryImpl) Delete(id string) *helper.CustomError {
+	userId, err := uuid.Parse(id)
+	result := t.Db.Unscoped().Delete(&model.User{}, userId)
+
+	if result.Error != nil || err != nil {
+		fileName, atLine := helper.GetFileAndLine(result.Error)
+		return &helper.CustomError{
+			Code:     500,
+			Message:  "Unexpected Error When Fetching Reports",
+			FileName: fileName,
+			AtLine:   atLine,
+		}
+	}
+
+	return nil
 }

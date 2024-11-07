@@ -11,4 +11,5 @@ type SupervisorRepository interface {
 	GetAllSupervisor() ([]model.Supervisor, *helper.CustomError)
 	FindSupervisorById(supervisorId string) (*model.Supervisor, *helper.CustomError)
 	FindByName(name string) (*model.Supervisor, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }

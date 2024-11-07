@@ -5,6 +5,7 @@ import (
 )
 
 type ReasonResponse struct {
-	Id          *uuid.UUID `json:"id"`
-	Description string     `json:"description"`
+	Id           *uuid.UUID `json:"id"`
+	Description  string     `json:"description"`
+	RejectedStep int        `json:"rejectedStep"`
 }

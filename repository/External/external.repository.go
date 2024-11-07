@@ -11,4 +11,5 @@ type ExternalRepository interface {
 	GetAllExternal() ([]model.External, *helper.CustomError)
 	Update(report model.External) *helper.CustomError
 	FindByName(name string) (*model.External, *helper.CustomError)
+	Delete(id string) *helper.CustomError
 }
